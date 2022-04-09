@@ -6,34 +6,57 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] public GameObject playerObject;
     [SerializeField] public GameObject mapObject;
+    [SerializeField] private string layerName;
+    [SerializeField] private ColorManager colorManager;
+    public Color colorHit;
     public float speed;
-    private Transform playerTransform;
-    private Rigidbody playerRigidbody;
-    // Start is called before the first frame update
-    void Start()
+    public float rotationSpeed;
+    Rigidbody rb;
+    //[SerializeField] public GravityAttractor planet;
+    //float counter = 0;
+
+    [SerializeField] GameObject th;
+
+    void Awake()
     {
-        playerTransform = playerObject.GetComponent<Transform>();
-        playerRigidbody = playerObject.GetComponent<Rigidbody>();
+        //planet = GameObject.FindGameObjectWithTag("Planet").GetComponent<GravityAttractor>();
+        rb = GetComponent<Rigidbody>();
+        Physics.gravity = new Vector3(0, -9.81f, 0);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        playerTransform.LookAt(mapObject.transform);
-        ApplyCustomGravity();
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            //playerObject.transform.Translate(-transform.up * speed *Time.deltaTime);
-            playerRigidbody.AddForce(playerObject.transform.up * speed * Time.deltaTime);
+            CastRayToGround();
         }
     }
 
-    private void ApplyCustomGravity()
+    private void FixedUpdate()
     {
-        Vector3 downForce = mapObject.transform.position - playerTransform.position;
-        downForce = downForce.normalized;
-        //playerObject.GetComponent<Rigidbody>().AddForce(downForce * 9.81f);
-        playerRigidbody.MovePosition(playerTransform.position + (downForce * Time.deltaTime));
-        //playerObject.transform.Translate(downForce * Time.deltaTime);
+        float xRot = Input.GetAxisRaw("Vertical");
+        float zRot = Input.GetAxisRaw("Horizontal");
+
+        Vector3 pos = new Vector3(xRot, 0, 0);
+        transform.RotateAround(mapObject.transform.position, transform.forward * zRot * Time.deltaTime, speed * Time.deltaTime);
+        transform.RotateAround(mapObject.transform.position, transform.right * xRot * Time.deltaTime, speed * Time.deltaTime);
+
+        th.transform.Rotate(0, 10, 0);
+    }
+
+    private void CastRayToGround()
+    {
+        RaycastHit hit;
+
+        Physics.Raycast(transform.position,-transform.up, 10f);
+
+        if(Physics.Raycast(transform.position, -transform.up, out hit, 10f) && hit.transform.gameObject.layer == LayerMask.NameToLayer(layerName))
+        {
+            colorManager.HandleColorChoice(hit);
+        }
+        else
+        {
+            Debug.Log("error");
+        }
     }
 }
