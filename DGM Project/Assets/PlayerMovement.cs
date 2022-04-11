@@ -11,17 +11,13 @@ public class PlayerMovement : MonoBehaviour
     public Color colorHit;
     public float speed;
     public float rotationSpeed;
-    Rigidbody rb;
-    //[SerializeField] public GravityAttractor planet;
-    //float counter = 0;
 
-    [SerializeField] GameObject th;
+    [SerializeField] GameObject questionColorObj;
+    [SerializeField] GameObject questionBottom;
 
     void Awake()
     {
         //planet = GameObject.FindGameObjectWithTag("Planet").GetComponent<GravityAttractor>();
-        rb = GetComponent<Rigidbody>();
-        Physics.gravity = new Vector3(0, -9.81f, 0);
     }
 
     private void Update()
@@ -38,10 +34,11 @@ public class PlayerMovement : MonoBehaviour
         float zRot = Input.GetAxisRaw("Horizontal");
 
         Vector3 pos = new Vector3(xRot, 0, 0);
-        transform.RotateAround(mapObject.transform.position, transform.forward * zRot * Time.deltaTime, speed * Time.deltaTime);
+        transform.RotateAround(mapObject.transform.position, transform.forward * -zRot * Time.deltaTime, speed * Time.deltaTime);
         transform.RotateAround(mapObject.transform.position, transform.right * xRot * Time.deltaTime, speed * Time.deltaTime);
 
-        th.transform.Rotate(0, 10, 0);
+        questionColorObj.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        questionBottom.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
     }
 
     private void CastRayToGround()

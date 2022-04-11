@@ -7,6 +7,7 @@ public class ColorManager : MonoBehaviour
     [SerializeField] GameObject playerObj;
     [SerializeField] public Renderer answerRenderer;
     [SerializeField] public Renderer questionRenderer;
+    [SerializeField] public Renderer questionBottom;
     [SerializeField] Renderer gameMapBuffer;
     private Color colorHit;
     private Vector3 questionColorVector;
@@ -27,6 +28,13 @@ public class ColorManager : MonoBehaviour
 
         Texture2D texture2D = gameMapBuffer.material.mainTexture as Texture2D;
         questionRenderer.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
+        questionRenderer.material.EnableKeyword("_EMISSION");
+        questionRenderer.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord));
+
+        questionBottom.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
+        questionBottom.material.EnableKeyword("_EMISSION");
+        questionBottom.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord));
+
         questionColorVector = new Vector3(questionRenderer.material.color.r, questionRenderer.material.color.g, questionRenderer.material.color.b);
         //mouseToWorld.questionColorVector = new Vector3(myRenderer.material.color.r, myRenderer.material.color.g, myRenderer.material.color.b);
         //print(texture2D.GetPixelBilinear(xUVCord, yUVCord));
@@ -39,12 +47,27 @@ public class ColorManager : MonoBehaviour
         Texture2D texture2D = renderer.material.mainTexture as Texture2D;
         colorHit = texture2D.GetPixelBilinear(pixelPos.x, pixelPos.y);
 
-        answerRenderer.material.color = colorHit;
+        //answerRenderer.material.color = colorHit;
         Vector3 answerColorVector = new Vector3(colorHit.r, colorHit.g, colorHit.b);
         //print($"Color key {questionColorVector} --- Answer {answerColorVector}");
         float questionVal = questionColorVector.x + questionColorVector.y + questionColorVector.z;
         float answerVal = answerColorVector.x + answerColorVector.y + questionColorVector.z;
         print(Mathf.Abs((int)(answerVal * 100) - (int)(questionVal * 100)));
         GrabRandomColor();
+    }
+
+    public void MakeRockRandomColor(Renderer rockMat)
+    {
+        float xUVCord = (float)(Random.Range(1, 100));
+        float yUVCord = (float)(Random.Range(1, 100));
+        xUVCord = xUVCord / 100f;
+        yUVCord = yUVCord / 100f;
+
+        Texture2D texture2D = gameMapBuffer.material.mainTexture as Texture2D;
+        rockMat.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
+
+        rockMat.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
+        rockMat.material.EnableKeyword("_EMISSION");
+        rockMat.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord));
     }
 }
