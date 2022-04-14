@@ -8,6 +8,7 @@ public class ColorManager : MonoBehaviour
     [SerializeField] GameObject playerObj;
     [SerializeField] public Renderer answerRenderer;
     [SerializeField] public Renderer questionRenderer;
+    [SerializeField] public List<Renderer> questionRenderHubs = new List<Renderer>();
     [SerializeField] public Renderer questionBottom;
     [SerializeField] Renderer gameMapBuffer;
     [SerializeField] public TextMeshPro scoreText;
@@ -29,7 +30,7 @@ public class ColorManager : MonoBehaviour
     private void Update()
     {
         score = Time.time - lastTime;
-        if(score > 10)
+        if(score > 3)
         {
             lastTime = Time.time;
             score = 0;
@@ -47,15 +48,24 @@ public class ColorManager : MonoBehaviour
         //Debug.Log($"{xUVCord}, {yUVCord}");
 
         Texture2D texture2D = gameMapBuffer.material.mainTexture as Texture2D;
+        /*
         questionRenderer.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
         questionRenderer.material.EnableKeyword("_EMISSION");
-        questionRenderer.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord));
+        questionRenderer.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord) * 15.0f);
+        */
+
+        foreach(Renderer child in questionRenderHubs)
+        {
+            child.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
+            child.material.EnableKeyword("_EMISSION");
+            child.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord) * 10.0f);
+        }
 
         questionBottom.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
         questionBottom.material.EnableKeyword("_EMISSION");
-        questionBottom.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord));
+        questionBottom.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord) * 10.0f);
 
-        questionColorVector = new Vector3(questionRenderer.material.color.r, questionRenderer.material.color.g, questionRenderer.material.color.b);
+        questionColorVector = new Vector3(questionBottom.material.color.r, questionBottom.material.color.g, questionBottom.material.color.b);
         //mouseToWorld.questionColorVector = new Vector3(myRenderer.material.color.r, myRenderer.material.color.g, myRenderer.material.color.b);
         //print(texture2D.GetPixelBilinear(xUVCord, yUVCord));
     }

@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotSpeed: 50
-  rock: {fileID: 2023517905, guid: 1d7cf80ff985b3d4da86a46d77ed1a1e, type: 3}
+  rock: {fileID: 100000, guid: 532788c369e551d44a067aa3c8bb182c, type: 3}
   rockList:
+  - {fileID: 1084553192, guid: 2934d248fbf71ae43908c5dba87ac6e5, type: 3}
   - {fileID: 128935683, guid: 8d931b3fb82717949a490ba2479926c4, type: 3}
   - {fileID: 2023517905, guid: 1d7cf80ff985b3d4da86a46d77ed1a1e, type: 3}
   - {fileID: 945401805, guid: a9b2c2ea8472caa40b47a88cf3badc04, type: 3}
@@ -55,4 +56,3 @@ MonoBehaviour:
   - {fileID: 785666640, guid: 40cdb1261502c5147946ac48cebac02b, type: 3}
   - {fileID: 114526028, guid: f0b038078591d7441bbc6586bbc421d2, type: 3}
   - {fileID: 1687137008, guid: 087932bfd0e7db149b7e604943e47caf, type: 3}
-  - {fileID: 1084553192, guid: 2934d248fbf71ae43908c5dba87ac6e5, type: 3}

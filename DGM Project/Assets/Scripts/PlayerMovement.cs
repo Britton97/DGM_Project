@@ -56,4 +56,12 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("error");
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name.Contains("Rock"))
+        {
+            Debug.Log("Hit a rock");
+        }
+    }
 }

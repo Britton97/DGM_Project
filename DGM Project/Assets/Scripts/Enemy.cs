@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         transform.RotateAround(Vector3.zero, direction, rotSpeed * Time.deltaTime);
-        rock.transform.Rotate(rotDirection * rotSpeed * Time.deltaTime);
+        rock.transform.Rotate(rotDirection * 50 * Time.deltaTime);
     }
 
     private void SpawnRock()
@@ -36,5 +36,17 @@ public class Enemy : MonoBehaviour
         ColorManager colorManager = GameObject.Find("ColorManager").GetComponent<ColorManager>();
         Renderer rockMat = rock.GetComponent<Renderer>();
         colorManager.MakeRockRandomColor(rockMat);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Player_Model")
+        {
+            Debug.Log("Hit the player");
+        }
+        else
+        {
+            Debug.Log("Hit something else");
+        }
     }
 }
