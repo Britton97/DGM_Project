@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnRock()
+    public void SpawnRock()
     {
         Quaternion m = Random.rotation;
         GameObject n = Instantiate(test, transform.position, m);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ColorManager : MonoBehaviour
 {
@@ -9,13 +10,32 @@ public class ColorManager : MonoBehaviour
     [SerializeField] public Renderer questionRenderer;
     [SerializeField] public Renderer questionBottom;
     [SerializeField] Renderer gameMapBuffer;
+    [SerializeField] public TextMeshPro scoreText;
+    [SerializeField] private EnemySpawner enemySpawner;
     private Color colorHit;
     private Vector3 questionColorVector;
+
+    public float score = 0;
+    private float lastTime;
+
 
     // Start is called before the first frame update
     void Start()
     {
         GrabRandomColor();
+        lastTime = Time.time;
+    }
+
+    private void Update()
+    {
+        score = Time.time - lastTime;
+        if(score > 10)
+        {
+            lastTime = Time.time;
+            score = 0;
+            enemySpawner.SpawnRock();
+        }
+        scoreText.text = $"{score:n1}";
     }
 
     private void GrabRandomColor()
@@ -52,7 +72,7 @@ public class ColorManager : MonoBehaviour
         //print($"Color key {questionColorVector} --- Answer {answerColorVector}");
         float questionVal = questionColorVector.x + questionColorVector.y + questionColorVector.z;
         float answerVal = answerColorVector.x + answerColorVector.y + questionColorVector.z;
-        print(Mathf.Abs((int)(answerVal * 100) - (int)(questionVal * 100)));
+        int num = Mathf.Abs((int)(answerVal * 100) - (int)(questionVal * 100));
         GrabRandomColor();
     }
 
