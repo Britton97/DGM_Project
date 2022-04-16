@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ColorManager : MonoBehaviour
 {
@@ -13,11 +14,14 @@ public class ColorManager : MonoBehaviour
     [SerializeField] Renderer gameMapBuffer;
     [SerializeField] public TextMeshPro scoreText;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private Slider meter;
     private Color colorHit;
     private Vector3 questionColorVector;
 
     public float score = 0;
     private float lastTime;
+
+    [SerializeField] Material deadMaterial;
 
 
     // Start is called before the first frame update
@@ -29,14 +33,37 @@ public class ColorManager : MonoBehaviour
 
     private void Update()
     {
-        score = Time.time - lastTime;
-        if(score > 3)
+        float timePass = Time.time - lastTime;
+        score += timePass;
+        meter.value = score;
+        if(meter.value >= meter.maxValue)
         {
             lastTime = Time.time;
             score = 0;
             enemySpawner.SpawnRock();
         }
-        scoreText.text = $"{score:n1}";
+        scoreText.text = $"{meter.value:n1}";
+        lastTime = Time.time;
+    }
+
+    public int LoseLife()
+    {
+
+        int len = questionRenderHubs.Count;
+        int rand = Random.Range(0, len);
+        questionRenderHubs[rand].GetComponent<Renderer>().material = deadMaterial;
+        questionRenderHubs.RemoveAt(rand);
+        if(questionRenderHubs.Count == 1)
+        {
+            Debug.Log("Game Over");
+            return -1;
+        }
+        return questionRenderHubs.Count - 1;
+    }
+
+    public int GetLifeCount()
+    {
+        return questionRenderHubs.Count;
     }
 
     private void GrabRandomColor()
@@ -48,11 +75,6 @@ public class ColorManager : MonoBehaviour
         //Debug.Log($"{xUVCord}, {yUVCord}");
 
         Texture2D texture2D = gameMapBuffer.material.mainTexture as Texture2D;
-        /*
-        questionRenderer.material.color = texture2D.GetPixelBilinear(xUVCord, yUVCord);
-        questionRenderer.material.EnableKeyword("_EMISSION");
-        questionRenderer.material.SetColor("_EmissionColor", texture2D.GetPixelBilinear(xUVCord, yUVCord) * 15.0f);
-        */
 
         foreach(Renderer child in questionRenderHubs)
         {
@@ -83,7 +105,45 @@ public class ColorManager : MonoBehaviour
         float questionVal = questionColorVector.x + questionColorVector.y + questionColorVector.z;
         float answerVal = answerColorVector.x + answerColorVector.y + questionColorVector.z;
         int num = Mathf.Abs((int)(answerVal * 100) - (int)(questionVal * 100));
+        //Debug.Log(num);
+        AddToMeter(num);
         GrabRandomColor();
+    }
+
+    private void AddToMeter(int adding)
+    {
+        StartCoroutine(AddingCoroutine(adding));
+    }
+
+    IEnumerator AddingCoroutine(float adding)
+    {
+        if(adding <= 20)
+        {
+            float minus = -((20 - adding) * 2);
+            adding = minus;
+        }
+        float div = adding / 20;
+        for (int i = 0; i < 20; i++)
+        {
+            yield return new WaitForSeconds(.05f);
+            if (div + meter.value >= meter.maxValue)
+            {
+                float val = (div + meter.value) - meter.maxValue;
+                score = val;
+                enemySpawner.SpawnRock();
+            }
+            else if (div + meter.value <= meter.minValue)
+            {
+                Debug.Log("got here");
+                float val = (div + meter.value) + meter.maxValue;
+                score = val;
+            }
+            else
+            {
+                score += div;
+            }
+        }
+
     }
 
     public void MakeRockRandomColor(Renderer rockMat)

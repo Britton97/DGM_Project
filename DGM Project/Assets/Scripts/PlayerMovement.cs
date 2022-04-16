@@ -15,9 +15,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject questionColorObj;
     [SerializeField] GameObject questionBottom;
 
+    public int lifeCount;
+
     void Awake()
     {
         //planet = GameObject.FindGameObjectWithTag("Planet").GetComponent<GravityAttractor>();
+        lifeCount = colorManager.GetLifeCount();
     }
 
     private void Update()
@@ -62,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.name.Contains("Rock"))
         {
             Debug.Log("Hit a rock");
+            lifeCount = colorManager.LoseLife();
         }
     }
 }
