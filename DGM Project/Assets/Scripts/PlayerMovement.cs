@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] GameObject questionColorObj;
     [SerializeField] GameObject questionBottom;
+    [SerializeField] GameObject vfx;
+    [SerializeField] GameObject hitVFX;
+    [SerializeField] Animator UFOAnimator;
 
     public int lifeCount;
 
@@ -66,6 +69,13 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Hit a rock");
             lifeCount = colorManager.LoseLife();
+            Destroy(collision.transform.parent.gameObject);
+            GameObject effect = Instantiate(vfx, collision.transform.parent.position, collision.transform.rotation);
+            Destroy(effect, 2.0f);
+            UFOAnimator.SetTrigger("PlayVFX");
+            GameObject hitEffect = Instantiate(hitVFX, transform.position, transform.rotation);
+            hitEffect.transform.parent = transform;
+            Destroy(hitEffect, 2.0f);
         }
     }
 }
