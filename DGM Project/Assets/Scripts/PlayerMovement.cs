@@ -18,12 +18,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject hitVFX;
     [SerializeField] Animator UFOAnimator;
 
+    [SerializeField] AudioSource laserAudioSource;
+    [SerializeField] AudioClip laserSound;
+    [SerializeField] AudioSource movementSource;
+    [SerializeField] AudioSource hitSource;
+
     public int lifeCount;
 
     void Awake()
     {
         //planet = GameObject.FindGameObjectWithTag("Planet").GetComponent<GravityAttractor>();
         lifeCount = colorManager.GetLifeCount();
+        movementSource.Play();
     }
 
     private void Update()
@@ -39,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         float xRot = Input.GetAxisRaw("Vertical");
         float zRot = Input.GetAxisRaw("Horizontal");
 
+
         Vector3 pos = new Vector3(xRot, 0, 0);
         transform.RotateAround(mapObject.transform.position, transform.forward * -zRot * Time.deltaTime, speed * Time.deltaTime);
         transform.RotateAround(mapObject.transform.position, transform.right * xRot * Time.deltaTime, speed * Time.deltaTime);
@@ -52,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
 
         Physics.Raycast(transform.position,-transform.up, 10f);
+        laserAudioSource.PlayOneShot(laserSound);
 
         if(Physics.Raycast(transform.position, -transform.up, out hit, 10f) && hit.transform.gameObject.layer == LayerMask.NameToLayer(layerName))
         {
@@ -67,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("Rock"))
         {
+            hitSource.Play();
             Debug.Log("Hit a rock");
             lifeCount = colorManager.LoseLife();
             Destroy(collision.transform.parent.gameObject);

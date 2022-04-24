@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnRock()
     {
-        Debug.Log("Spawned a rock");
+        //Debug.Log("Spawned a rock");
         Quaternion m = Random.rotation;
         GameObject n = Instantiate(test, transform.position, m);
         n.transform.position = n.transform.forward * 10;
