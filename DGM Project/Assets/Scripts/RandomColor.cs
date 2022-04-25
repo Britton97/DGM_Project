@@ -39,30 +39,4 @@ public class RandomColor : MonoBehaviour
         mouseToWorld.questionColorVector = new Vector3(myRenderer.material.color.r, myRenderer.material.color.g, myRenderer.material.color.b);
         //print(texture2D.GetPixelBilinear(xUVCord, yUVCord));
     }
-
-    /*
-    private Color RandomColor255()
-    {
-        int r = Random.Range(0, 255);
-        int g = Random.Range(0, 255);
-        int b = Random.Range(0, 255);
-
-        Debug.Log($"{r},{g},{b}");
-        Color newColor = new Color(r / 255f, g / 255f, b / 255f, 1);
-        myRenderer.material.color = newColor;
-        return newColor;
-    }
-    */
 }
-
-//GARBAGE CODE BUT MIGHT COME IN HANDY LATER
-
-//myRenderer.material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-//mouseToWorld.question = myRenderer.material.color;
-//Color newColor = RandomColor255();
-//print($"{newColor.r * 255},{newColor.g * 255}, {newColor.b * 255}");
-//Vector3 t = new Vector3 (newColor.r * 255,newColor.g * 255, newColor.b * 255);
-//mouseToWorld.colorKey = t;
-//mouseToWorld.colorKey = new Vector3(myRenderer.material.color.r * 255, myRenderer.material.color.g * 255, myRenderer.material.color.b * 255);
-//mouseToWorld.colorKey = new Vector3((int)(myRenderer.material.color.r * 100), (int)(myRenderer.material.color.g * 100), (int)(myRenderer.material.color.b * 100));
-//print(new Vector3(myRenderer.material.color.r * 255, myRenderer.material.color.g * 255, myRenderer.material.color.b * 255));

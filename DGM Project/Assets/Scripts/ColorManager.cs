@@ -77,6 +77,7 @@ public class ColorManager : MonoBehaviour
         if(questionRenderHubs.Count == 1)
         {
             Debug.Log("Game Over");
+            FindObjectOfType<SceneManager>().LoadMenuScreen();
             return -1;
         }
         return questionRenderHubs.Count - 1;
